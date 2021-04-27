@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-masthead></app-masthead>
+
     <div class="posts">
       <main>
         <div class="post" v-for="post in sortedPosts" :key="post.id">
@@ -11,10 +11,8 @@
           <div v-html="post.excerpt.rendered"></div>
           <a :href="`blog/${post.slug}`" class="readmore slide">Read more ⟶</a>
         </div>
-      </main>
-      <aside>
-        <h2 class="tags-title">Tags</h2>
-        <div class="tags-list">
+
+          <div class="tags-list">
           <ul>
             <li
               @click="updateTag(tag)"
@@ -27,6 +25,21 @@
             </li>
           </ul>
         </div>
+      </main>
+      <aside>
+        <h2>Categories</h2>
+
+        <div class="post" v-for="page in pages" :key="page.id">
+          <h3>
+            <a :href="`blog/${page.slug}`">{{ page.title.rendered }}</a>
+          </h3>
+          <small>{{ page.date | dateformat }}</small>
+          <div v-html="page.excerpt.rendered"></div>
+          <a :href="`blog/${page.slug}`" class="readmore slide">Read more ⟶</a>
+        </div>
+
+
+      
       </aside>
     </div>
   </div>
@@ -49,6 +62,9 @@ export default {
     posts() {
       return this.$store.state.posts;
     },
+    pages() {
+      return this.$store.state.pages;
+    },
     tags() {
       return this.$store.state.tags;
     },
@@ -59,6 +75,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getPosts");
+        this.$store.dispatch("getPages");
   },
   methods: {
     updateTag(tag) {

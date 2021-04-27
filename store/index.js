@@ -2,6 +2,7 @@ const siteURL = "https://flipmind.com"
 
 export const state = () => ({
   posts: [],
+  pages: [],
   tags: []
 })
 
@@ -9,6 +10,9 @@ export const mutations = {
   updatePosts: (state, posts) => {
     state.posts = posts
   },
+    updatePages: (state, pages) => {
+      state.pages = pages
+    },
   updateTags: (state, tags) => {
     state.tags = tags
   }
@@ -36,6 +40,32 @@ export const actions = {
         }))
 
       commit("updatePosts", posts)
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async getPages({
+    state,
+    commit
+  }) {
+
+    try {
+      let pages = await fetch(
+        `${siteURL}/wp-json/wp/v2/pages?page=1&per_page=20&_embed=1`
+      ).then(res => res.json())
+      pages = pages
+        .filter(el => el.status === "publish")
+        .map(({ id, slug, title, excerpt, date, tags, content }) => ({
+          id,
+          slug,
+          title,
+          excerpt,
+          date,
+          tags,
+          content
+        }))
+
+      commit("updatePages", pages)
     } catch (err) {
       console.log(err)
     }
