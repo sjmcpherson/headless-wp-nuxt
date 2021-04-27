@@ -27,7 +27,7 @@
         </div>
       </main>
       <aside>
-        <h2>Categories</h2>
+        <h2>Pages</h2>
 
         <div class="post" v-for="page in pages" :key="page.id">
           <h3>
